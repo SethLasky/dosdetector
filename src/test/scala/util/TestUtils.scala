@@ -5,6 +5,7 @@ import file.FileReader
 import fs2.Stream
 
 import scala.concurrent.ExecutionContext.global
+import scala.util.Random
 
 trait TestUtils extends FileReader {
   lazy implicit val ctxShift: ContextShift[IO] = IO.contextShift(global)
@@ -14,4 +15,6 @@ trait TestUtils extends FileReader {
     val timeFormat = new java.text.SimpleDateFormat("dd/MMMMM/yyyy:HH:mm:ss")
     Stream.resource(Blocker[IO]) flatMap readDosReport(getClass.getResource("/apache-log.txt").getPath)(timeFormat)
   }
+
+  def randomString(length: Int) = Random.alphanumeric.take(length).mkString
 }

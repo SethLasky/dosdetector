@@ -12,7 +12,7 @@ class KafkaClientTest extends WordSpecLike with Matchers with KafkaClient with T
   "KafkaClient" must {
     "produce messages to a kafka topic and be able to consume from that topic" in {
       val kafkaUrl = "localhost:9092"
-      val topic = Random.alphanumeric.take(10).mkString
+      val topic = randomString(10)
       val dosReportStream = dosReportStreamFromFile.filter(_.isRight).map(_.right.get).take(5000)
       val producerSettings = ProducerSettings[IO, String, String].withBootstrapServers(kafkaUrl)
       val consumerSettings = ConsumerSettings[IO, String, String]
