@@ -23,9 +23,8 @@ class KafkaClientTest extends WordSpecLike with Matchers with KafkaClient with T
 
       val publishStream = for {
         producer <- producerStream[IO].using(producerSettings)
-        dosReport <- dosReportStream
-        consumedReport <- Stream.eval(produceDosReports(dosReport, producer, topic)).drain
-      } yield consumedReport
+        published <- dosReportStream flatMap produceDosReports(producer, topic)
+      } yield published
 
       val consumedStream = for {
         consumer <- consumerStream[IO].using(consumerSettings).evalTap(_.subscribeTo(topic))

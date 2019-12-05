@@ -22,7 +22,7 @@ trait FileReader {
     timeFormat.parse(dateString).getTime
   }
 
-  def readDosReport(source: String)(timeFormat: java.text.SimpleDateFormat)(blocker: Blocker)(implicit cs: ContextShift[IO], ce: ConcurrentEffect[IO]) = readFile(source)(blocker) through reportPipe(timeFormat)(blocker)
+  def readLogFile(source: String)(timeFormat: java.text.SimpleDateFormat)(blocker: Blocker)(implicit cs: ContextShift[IO], ce: ConcurrentEffect[IO]) = readFile(source)(blocker) through reportPipe(timeFormat)(blocker)
 }
 
 case class DosReport(ip: String, time: Long)

@@ -13,7 +13,7 @@ trait TestUtils extends FileReader {
 
   def dosReportStreamFromFile = {
     val timeFormat = new java.text.SimpleDateFormat("dd/MMMMM/yyyy:HH:mm:ss")
-    Stream.resource(Blocker[IO]) flatMap readDosReport(getClass.getResource("/apache-log.txt").getPath)(timeFormat)
+    Stream.resource(Blocker[IO]) flatMap readLogFile(getClass.getResource("/apache-log.txt").getPath)(timeFormat)
   }
 
   def randomString(length: Int) = Random.alphanumeric.take(length).mkString

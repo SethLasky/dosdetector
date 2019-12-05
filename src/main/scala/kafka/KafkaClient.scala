@@ -6,6 +6,7 @@ import fs2.kafka._
 import io.circe.generic.auto._
 import io.circe.parser.decode
 import io.circe.syntax._
+import fs2.Stream
 
 
 trait KafkaClient {
@@ -17,8 +18,8 @@ trait KafkaClient {
     case Left(err) => Left(new Error(s"There was an error decoding the message: ${message.record.value}. Error: $err"))
   }
 
-  def produceDosReports(dosReport: DosReport, producer: KafkaProducer[IO, String, String], topic: String)
-                       (implicit ctxShift: ContextShift[IO], timer: Timer[IO], concurrent: Concurrent[IO]) = {
+  def produceDosReports(producer: KafkaProducer[IO, String, String], topic: String)(dosReport: DosReport)
+                       (implicit ctxShift: ContextShift[IO], timer: Timer[IO], concurrent: Concurrent[IO]) = Stream.eval {
     val producerRecord = transformToProducerRecord(dosReport, topic)
     val producerMessage = ProducerRecords.one(producerRecord)
     producer.produce(producerMessage)
